@@ -14,15 +14,17 @@ def sniff_dns(sniff_time):
 	else:
 		sniff_time = int(sniff_time)
 
-	packet_list = sniff(filter=dns_filter, timeout=sniff_time)
-	print packet_list.summary()
+	sniff(prn=announce(), store=1, timeout=sniff_time)
+	#print packet_list.summary()
 #proud announcement and packet breakdown
 def announce():
 	print " got one"
 
 #spam client with DNS replies
-def spam_replies():
-	print "filler"
+def spam_replies(evil_ip, target):
+	print "About to spam " + target + " with IP: " + evil_ip
+
+	#spam_response = IP(dst=target)\UDP(dport=53)
 
 #sit and wait for DNS requests and try to reply first
 def surgical_strike():
@@ -40,8 +42,10 @@ def main():
 	parser.add_argument("-t", "--target", help="the target IP")
 	args = parser.parse_args()
 
-	#print args
-	sniff_dns(args.secs)
+	
+	#sniff_dns(args.secs)
+	if args.noisy != None:
+		spam_replies(args.evil, args.target)
 
 
 
