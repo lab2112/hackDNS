@@ -4,16 +4,21 @@ import argparse
 
 
 #sniff the traffic for at least a minute to try to capture DNS server
-def sniff_dns(intime):
+def sniff_dns(sniff_time):
 	print "sniffing for DNS requests"
 	dns_filter = "udp port 53"
-	sniff_time = 60
-		
-	sniff(filter=dns_filter, prn=announce(pkt), time=sniff_time)
 
+	#checking time to run the filter
+	if sniff_time==None:
+		sniff_time =300
+	else:
+		sniff_time = int(sniff_time)
+
+	packet_list = sniff(filter=dns_filter, timeout=sniff_time)
+	print packet_list.summary()
 #proud announcement and packet breakdown
-def announce(pkt):
-	print "got one"
+def announce():
+	print " got one"
 
 #spam client with DNS replies
 def spam_replies():
