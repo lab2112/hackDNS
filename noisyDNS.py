@@ -14,11 +14,11 @@ def sniff_dns(sniff_time):
 	else:
 		sniff_time = int(sniff_time)
 
-	sniff(prn=announce(), store=1, timeout=sniff_time)
-	#print packet_list.summary()
+	sniff(prn=attack, store=1, timeout=sniff_time)
+	
 #proud announcement and packet breakdown
-def announce():
-	print " got one"
+def attack(packet):
+	print packet.summary()
 
 #spam client with DNS replies
 def spam_replies(evil_ip, target):
@@ -43,9 +43,9 @@ def main():
 	args = parser.parse_args()
 
 	
-	#sniff_dns(args.secs)
-	if args.noisy != None:
-		spam_replies(args.evil, args.target)
+	sniff_dns(args.secs)
+	#if args.noisy != None:
+	#	spam_replies(args.evil, args.target)
 
 
 
